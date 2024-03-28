@@ -10,7 +10,7 @@ function cachingDecoratorNew(func) {
 			return "Из кеша: " + objectInCache.value;
 		}
 		let result = func(...args);
-		cache.push(hash, value: result);
+		cache.push({hash, value: result});
 		if (cache.length > 5) {
 			cache.shift();
 		}
@@ -25,13 +25,15 @@ function debounceDecoratorNew(func, delay) {
 	let timeoutId = null
 
 	function wrapper(...args) {
+	wrapper.allCount++;
+
 		if (timeoutId) {
 			clearTimeout(timeoutId);
 		} else {
 			func(...args);
 			wrapper.count++
 		}
-		timeoutId = setTimeout(() => {
+		timeoutId = setTimeout( () => {
 			func(args);
 			wrapper.count++
 		}, delay);
